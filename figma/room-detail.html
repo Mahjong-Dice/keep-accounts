@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>多人记账小程序 - 房间详情原型</title>
+    <style>
+        /* 只保留核心样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .prototype {
+            max-width: 375px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            height: 667px;
+            position: relative;
+        }
+        .screen {
+            padding: 20px;
+            height: calc(100% - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+        .room-header {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 16px;
+        }
+        .page-title {
+            font-size:20px;
+        }
+        .detail-action {
+            font-size:14px;
+            color: #4CAF50;
+            cursor: pointer;
+        }
+        .users-scroll-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 16px;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+        }
+        .user-scroll-item {
+            min-width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 12px 8px;
+            flex-shrink: 0;
+        }
+        .user-scroll-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #E3F2FD;
+            color: #2196F3;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .user-scroll-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .user-scroll-balance {
+            font-size: 13px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .room-detail-content {
+            padding-bottom: 72px;
+        }
+        .tabbar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 56px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            z-index: 10;
+        }
+        .tabbar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .tabbar-item.active {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .tabbar-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype">
+        <div class="screen room-detail-screen">
+            <!-- 顶部房间信息 -->
+            <div class="room-header">
+                <div>
+                    <div class="page-title">聚餐AA</div>
+                    <div style="font-size:12px; color:#999;">房间码：A7B9C2</div>
+                </div>
+                <div class="detail-action">编辑</div>
+            </div>
+
+            <!-- 横向滚动用户列表 -->
+            <div class="users-scroll-list" id="users-scroll-list">
+                <!-- JS渲染用户 -->
+            </div>
+
+            <div class="room-detail-content">
+                <!-- 这里可以放消费统计、债务关系等内容，保持原有 summary-card、debt-list 等结构 -->
+                <!-- ... 省略原有内容 ... -->
+            </div>
+        </div>
+        <!-- 底部tabbar -->
+        <div class="tabbar">
+            <div class="tabbar-item active" id="tab-account">
+                <div class="tabbar-icon">📒</div>
+                记账
+            </div>
+            <div class="tabbar-item" id="tab-me">
+                <div class="tabbar-icon">👤</div>
+                我的
+            </div>
+        </div>
+    </div>
+    <script>
+        // 示例用户数据
+        const users = [
+            { id: 1, name: "张三", avatar: "张", balance: 0 },
+            { id: 2, name: "李四", avatar: "李", balance: 0 },
+            { id: 3, name: "王五", avatar: "王", balance: 0 },
+            { id: 4, name: "赵六", avatar: "赵", balance: 0 }
+        ];
+        // 渲染横向用户列表
+        function renderUsersScrollList() {
+            const list = document.getElementById('users-scroll-list');
+            list.innerHTML = '';
+            users.forEach(user => {
+                const item = document.createElement('div');
+                item.className = 'user-scroll-item';
+                item.innerHTML = `
+                    <div class="user-scroll-avatar">${user.avatar}</div>
+                    <div class="user-scroll-name">${user.name}</div>
+                    <div class="user-scroll-balance">¥${user.balance.toFixed(2)}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUsersScrollList();
+            // tabbar切换
+            document.getElementById('tab-account').addEventListener('click', function() {
+                this.classList.add('active');
+                document.getElementById('tab-me').classList.remove('active');
+                // 切换到记账页面逻辑
+            });
+            document.getElementById('tab-me').addEventListener('click', function() {
+                this.classList.add('active');
+                document.getElementById('tab-account').classList.remove('active');
+                // 切换到我的页面逻辑
+            });
+        });
+    </script>
+</body>
+</html>

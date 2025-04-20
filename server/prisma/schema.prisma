@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  wxOpenId  String    @unique @db.VarChar(255)
+  name      String?   @db.VarChar(50)
+  avatarUrl String?   @map("avatar_url") @db.VarChar(512)
+  createdAt DateTime  @default(now()) @map("created_at")
+  member    RoomMember?
+  ownedRoom Room?     @relation("ownedRoom")  // 修改为单数形式，表示一对一关系
+
+  @@map("users")
+}
+
+model Room {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(100)
+  owner        User      @relation("ownedRoom", fields: [ownerId], references: [wxOpenId], onDelete: Cascade, onUpdate: Cascade)
+  ownerId      String    @unique @map("owner_id")
+  status       String    @default("active") @db.VarChar(10)
+  qrCodeUrl    String?   @map("qr_code_url") @db.VarChar(512)
+  inviteToken  String?   @unique @map("invite_token") @db.Char(64)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  members      RoomMember[] @relation("RoomToMembers")
+  population   RoomPopulation?
+  transfers    Transfer[] @relation("RoomTransfers")
+
+  @@map("rooms")
+  @@index([inviteToken])
+}
+
+model RoomMember {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int      @unique @map("user_id")
+  room       Room     @relation("RoomToMembers", fields: [roomId], references: [id], onDelete: Cascade)
+  roomId     Int      @map("room_id")
+  role       String   @db.VarChar(10)
+  nickname   String   @db.VarChar(50)
+  avatarUrl  String?  @map("avatar_url") @db.VarChar(512)
+  balance    Decimal  @default(0) @db.Decimal(10, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  transfersFrom Transfer[] @relation("SentTransfers")
+  transfersTo   Transfer[] @relation("ReceivedTransfers")
+
+  @@map("room_members")
+  @@unique([userId, roomId])
+}
+
+model Transfer {
+  id            Int      @id @default(autoincrement())
+  fromMember   RoomMember? @relation("SentTransfers", fields: [fromMemberId], references: [id], onDelete: Cascade)
+  fromMemberId Int?        @map("from_member_id")
+  toMember     RoomMember? @relation("ReceivedTransfers", fields: [toMemberId], references: [id], onDelete: Cascade)
+  toMemberId   Int?        @map("to_member_id")
+  amount        Decimal  @db.Decimal(10, 2)
+  status        String   @default("pending") @db.VarChar(20)
+  createdAt     DateTime @default(now()) @map("created_at")
+  room          Room     @relation("RoomTransfers", fields: [roomId], references: [id], onDelete: Cascade)
+  roomId        Int      @map("room_id")
+
+  @@map("transfers")
+}
+
+model RoomPopulation {
+  roomId       Int    @id @map("room_id")
+  room         Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  memberCount  Int    @default(1) @map("member_count")
+
+  @@map("room_population")
+}

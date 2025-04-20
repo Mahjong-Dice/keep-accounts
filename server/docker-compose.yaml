@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: keep-accounts-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: .
+      dockerfile: ../server/Dockerfile
+    container_name: keep-accounts-server
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://root:123456@postgres:5432/postgres?schema=public
+      - PORT=3000
+      - JWT_SECRET=你的JWT_SECRET
+      - TOKEN_EXPIRES_IN=24h
+      - WECHAT_APPID=你的WECHAT_APPID
+      - WECHAT_SECRET=你的WECHAT_SECRET
+    ports:
+      - '3000:3000'
+      - '5555:5555'
+    volumes:
+      - /app/node_modules
+    command: >
+      sh -c "npx prisma migrate deploy && npx prisma studio & npm start"
+
+
+volumes:
+  postgres_data:

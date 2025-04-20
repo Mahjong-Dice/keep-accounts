@@ -1,0 +1,134 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20rpx;
+  padding: 0 40rpx;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #4caf50;
+  border-radius: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  transition: background-color 0.3;
+  font-size: 72rpx;
+  font-bold: 700;
+  color: #fff;
+}
+
+.title {
+  color: #333333;
+  font-size: 60rpx;
+  font-weight: bold;
+  text-align: center;
+}
+.desc {
+  color: #666666;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.button-group {
+  margin-top: 80rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.button {
+  width: 100%;
+  height: 100rpx;
+  background-color: #4caf50;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  transition: 
+    background-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+/* 按钮悬停和激活时的动效 */
+.button:hover,
+.button:active {
+  background-color: #388e3c;
+  box-shadow: 0 4rpx 16rpx rgba(76, 175, 80, 0.2);
+  transform: scale(1.04);
+}
+.button-join {
+  background-color: #e7f5e9;
+  color: #4caf50;
+}
+
+.his {
+  margin-top: 80rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+.his-title {
+  color: #666;
+  font-size: 30rpx;
+}
+
+.his-item {
+  display: flex;
+  gap: 20rpx;
+  background-color: #f9f9f9;
+  padding: 30rpx;
+  border-radius: 10rpx;
+  align-items: center;
+}
+
+.his-item-avator {
+  width: 80rpx;
+  height: 80rpx;
+  background-color: #2196f3;
+  border-radius: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 30rpx;
+}
+
+.his-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+.his-item-title {
+  color: #333;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+.his-item-desc {
+  color: #666;
+  font-size: 24rpx;
+}
+
+/* 新增右箭头样式 */
+.arrow-right {
+  display: inline-block;
+  width: 10rpx;
+  height: 10rpx;
+  border-top: 4rpx solid #bbb;
+  border-right: 4rpx solid #bbb;
+  transform: rotate(45deg);
+  margin-left: auto; /* 将箭头移到最右侧 */
+  margin-right: 10rpx;
+  transition: margin-right 0.2s, border-color 0.2s;
+}
+
+/* 悬停时箭头右移并变色 */
+.his-item:hover .arrow-right {
+  margin-right: 0;
+  border-color: #4caf50;
+}

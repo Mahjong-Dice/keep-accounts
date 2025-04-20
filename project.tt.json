@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "keep-accounts",
+  "description": "多人记账",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
+}

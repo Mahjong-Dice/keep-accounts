@@ -1,0 +1,120 @@
+/* 在上面的CSS基础上添加 */
+.transaction-avatars {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #f0f0f0;
+}
+
+.arrow {
+    margin: 0 8px;
+    color: #bbb;
+    font-size: 14px;
+}
+
+/* 交易历史记录样式 */
+.history-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    /* min-height: 100vh; */
+}
+
+.loading-text {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 16px;
+}
+
+.empty-text {
+    text-align: center;
+    padding: 50px 0;
+    color: #999;
+    font-size: 16px;
+}
+
+.transaction-list {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.transaction-item {
+    padding: 18px 20px;
+    border-bottom: 1px solid #efefef;
+    position: relative;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-main {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.transaction-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.transaction-names {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.transaction-amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #07c160;
+}
+
+.transaction-time {
+    font-size: 13px;
+    color: #999;
+}
+
+/* 适配暗黑模式 */
+@media (prefers-color-scheme: dark) {
+    .history-container {
+        background-color: #1c1c1e;
+    }
+
+    .transaction-list {
+        background-color: #2c2c2e;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .transaction-item {
+        border-bottom: 1px solid #3a3a3c;
+    }
+
+    .transaction-names {
+        color: #e5e5e7;
+    }
+
+    .transaction-amount {
+        color: #34c759;
+    }
+
+    .transaction-time {
+        color: #8e8e93;
+    }
+
+    .loading-text,
+    .empty-text {
+        color: #8e8e93;
+    }
+}

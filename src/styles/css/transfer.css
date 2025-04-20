@@ -1,0 +1,128 @@
+/* 转账模态窗口样式 */
+.transfer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.transfer-content {
+    width: 90%;
+    min-height: 480px;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.transfer-header {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.transfer-title {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.transfer-close {
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.transfer-body {
+    padding: 30px;
+    flex: 1;
+}
+
+.receiver-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.receiver-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.receiver-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.amount-section {
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.amount-label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+    font-size: 22px;
+}
+
+.amount-input-container {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-top: 10px;
+}
+
+.currency-symbol {
+    font-size: 26px;
+    margin-right: 12px;
+    color: #333;
+}
+
+.amount-input {
+    flex: 1;
+    font-size: 26px;
+    border: none;
+    outline: none;
+    height: 56px;
+}
+
+.transfer-footer {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #f0f0f0;
+}
+
+.cancel-button,
+.confirm-button {
+    min-width: 38%;
+    padding: 6px 0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.cancel-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.confirm-button {
+    background-color: #07c160;
+    color: white;
+}
+
+/* 禁用状态 */
+.confirm-button[disabled] {
+    opacity: 0.6;
+}

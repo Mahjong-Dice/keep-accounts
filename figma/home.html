@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>多人记账小程序 - 原型设计</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .prototype {
+            max-width: 375px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            height: 667px;
+            position: relative;
+        }
+        .screen {
+            padding: 20px;
+            height: calc(100% - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #4CAF50;
+            border-radius: 20px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .app-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        .main-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .btn {
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #E8F5E9;
+            color: #4CAF50;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .recent-rooms {
+            flex: 1;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #666;
+        }
+        .room-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .room-item {
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .room-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #2196F3;
+            border-radius: 10px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .room-info {
+            flex: 1;
+        }
+        .room-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .room-meta {
+            font-size: 12px;
+            color: #999;
+        }
+        .room-arrow {
+            color: #ccc;
+        }
+        
+        /* 其他页面样式将在下方添加 */
+        .create-room-screen, .join-room-screen, .user-info-screen, 
+        .room-main-screen, .transfer-screen, .history-screen {
+            display: none; /* 默认隐藏其他页面 */
+        }
+        
+        /* 创建房间页面 */
+        .nav-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .back-btn {
+            font-size: 20px;
+            margin-right: 16px;
+            cursor: pointer;
+        }
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        .form-footer {
+            margin-top: auto;
+        }
+        
+        /* 用户信息设置页面 */
+        .avatar-selector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #E8F5E9;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4CAF50;
+            font-size: 36px;
+            overflow: hidden;
+        }
+        .avatar-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .avatar-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: #f0f0f0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* 房间主页 */
+        .room-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .room-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .room-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #E8F5E9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4CAF50;
+            cursor: pointer;
+        }
+        .room-code {
+            background-color: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .code-value {
+            margin-left: 8px;
+            font-weight: 600;
+        }
+        .users-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .user-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            width: calc(50% - 8px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #E3F2FD;
+            color: #2196F3;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .user-name {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .user-balance {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .bottom-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            border-top: 1px solid #eee;
+        }
+        .bottom-btn {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            background-color: white;
+            cursor: pointer;
+        }
+        .bottom-btn:first-child {
+            border-right: 1px solid #eee;
+        }
+        
+        /* 转账页面 */
+        .recipient-list {
+            margin-bottom: 24px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .recipient-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .recipient-item.selected {
+            background-color: #E8F5E9;
+        }
+        .recipient-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #E3F2FD;
+            color: #2196F3;
+            font-weight: bold;
+        }
+        .recipient-name {
+            font-weight: 600;
+        }
+        .amount-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .currency-symbol {
+            font-size: 24px;
+            margin-right: 8px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .amount-field {
+            font-size: 24px;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            padding: 8px 0;
+            flex: 1;
+            text-align: left;
+            font-weight: bold;
+        }
+        .amount-field:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        /* 历史记录页面 */
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .history-item {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .history-users {
+            display: flex;
+            align-items: center;
+        }
+        .history-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #E3F2FD;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2196F3;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .history-direction {
+            margin: 0 8px;
+            color: #999;
+        }
+        .history-amount {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .history-time {
+            font-size: 12px;
+            color: #999;
+        }
+        .history-note {
+            font-size: 14px;
+            color: #666;
+        }
+        .filter-bar {
+            display: flex;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        .filter-chip {
+            padding: 6px 12px;
+            border-radius: 16px;
+            background-color: #f0f0f0;
+            font-size: 12px;
+            margin-right: 8px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .filter-chip.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        /* 房间详情页面样式 */
+        .room-detail-screen {
+            display: none; /* 默认隐藏 */
+        }
+        
+        .detail-section {
+            margin-bottom: 24px;
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .detail-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .detail-action {
+            font-size: 14px;
+            color: #4CAF50;
+            cursor: pointer;
+        }
+        
+        .summary-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .summary-label {
+            color: #666;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+        }
+        
+        .summary-total {
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .summary-total-label {
+            font-weight: 600;
+        }
+        
+        .summary-total-value {
+            font-weight: bold;
+            font-size: 18px;
+            color: #4CAF50;
+        }
+        
+        .debt-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .debt-item {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .debt-direction {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .debt-amount {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .debt-amount.positive {
+            color: #4CAF50;
+        }
+        
+        .debt-amount.negative {
+            color: #F44336;
+        }
+        
+        .debt-action {
+            padding: 8px 16px;
+            background-color: #E8F5E9;
+            color: #4CAF50;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin-bottom: 16px;
+        }
+        
+        .chart-placeholder {
+            background-color: #f9f9f9;
+            border-radius: 16px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        .tab-bar {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab-item {
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .tab-item.active {
+            color: #4CAF50;
+        }
+        
+        .tab-item.active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype">
+        <!-- 首页 -->
+        <div class="screen home-screen">
+            <div class="header">
+                <div class="logo">记</div>
+                <div class="app-name">多人记账</div>
+                <div class="app-desc">简单、便捷的多人记账工具</div>
+            </div>
+            
+            <div class="main-buttons">
+                <div class="btn btn-primary">创建房间</div>
+                <div class="btn btn-secondary">加入房间</div>
+            </div>
+            
+            <div class="recent-rooms">
+                <div class="section-title">最近的房间</div>
+                <div class="room-list">
+                    <div class="room-item">
+                        <div class="room-icon">聚</div>
+                        <div class="room-info">
+                            <div class="room-name">聚餐AA</div>
+                            <div class="room-meta">4人 · 2小时前</div>
+                        </div>
+                        <div class="room-arrow">›</div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon">旅</div>
+                        <div class="room-info">
+                            <div class="room-name">旅行账本</div>
+                            <div class="room-meta">3人 · 昨天</div>
+                        </div>
+                        <div class="room-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 创建房间页面 -->
+        <div class="screen create-room-screen">
+            <div class="nav-header">
+                <div class="back-btn">←</div>
+                <div class="page-title">创建房间</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">房间名称</label>
+                <input type="text" class="form-input" placeholder="请输入房间名称">
+            </div>
+            
+            <div class="form-footer">
+                <div class="btn btn-primary">创建</div>
+            </div>
+        </div>
+        
+        <!-- 加入房间页面 -->
+        <div class="screen join-room-screen">
+            <div class="nav-header">
+                <div class="back-btn">←</div>
+                <div class="page-title">加入房间</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">房间码</label>
+                <input type="text" class="form-input" placeholder="请输入6位房间码">
+            </div>
+            
+            <div class="form-group" style="text-align: center;">
+                <div style="margin-bottom: 12px; color: #666;">或者</div>
+                <div class="btn btn-secondary" style="display: inline-block;">
+                    <span style="margin-right: 8px;">📷</span> 扫码加入
+                </div>
+            </div>
+            
+            <div class="form-footer">
+                <div class="btn btn-primary">加入</div>
+            </div>
+        </div>
+        
+        <!-- 用户信息设置页面 -->
+        <div class="screen user-info-screen">
+            <div class="nav-header">
+                <div class="page-title">设置个人信息</div>
+            </div>
+            
+            <div class="avatar-selector">
+                <div class="avatar-preview">
+                    <span>+</span>
+                </div>
+                <div class="avatar-actions">
+                    <div class="avatar-btn">选择头像</div>
+                    <div class="avatar-btn">拍照</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">您的名称</label>
+                <input type="text" class="form-input" placeholder="请输入您的名称">
+            </div>
+            
+            <div class="form-footer">
+                <div class="btn btn-primary">确认</div>
+            </div>
+        </div>
+        
+        <!-- 房间主页 -->
+        <div class="screen room-main-screen">
+            <div class="room-header">
+                <div class="room-title">聚餐AA</div>
+                <div class="room-actions">
+                    <div class="action-btn">+</div>
+                    <div class="action-btn">⋮</div>
+                </div>
+            </div>
+            
+            <div class="room-code">
+                <span>房间码</span>
+                <span class="code-value">A7B9C2</span>
+            </div>
+            
+            <div class="users-list">
+                <div class="user-card">
+                    <div class="user-avatar">张</div>
+                    <div class="user-name">张三</div>
+                    <div class="user-balance">¥120.50</div>
+                </div>
+                <div class="user-card">
+                    <div class="user-avatar">李</div>
+                    <div class="user-name">李四</div>
+                    <div class="user-balance">¥-45.00</div>
+                </div>
+                <div class="user-card">
+                    <div class="user-avatar">王</div>
+                    <div class="user-name">王五</div>
+                    <div class="user-balance">¥85.00</div>
+                </div>
+                <div class="user-card">
+                    <div class="user-avatar">赵</div>
+                    <div class="user-name">赵六</div>
+                    <div class="user-balance">¥-160.50</div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <div class="bottom-btn">转账</div>
+                <div class="bottom-btn">历史记录</div>
+            </div>
+        </div>
+        
+        <!-- 转账页面 -->
+        <div class="screen transfer-screen">
+            <div class="nav-header">
+                <div class="back-btn">←</div>
+                <div class="page-title">转账</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">选择接收方</label>
+                <div class="recipient-list">
+                    <div class="recipient-item selected">
+                        <div class="recipient-avatar">李</div>
+                        <div class="recipient-name">李四</div>
+                    </div>
+                    <div class="recipient-item">
+                        <div class="recipient-avatar">王</div>
+                        <div class="recipient-name">王五</div>
+                    </div>
+                    <div class="recipient-item">
+                        <div class="recipient-avatar">赵</div>
+                        <div class="recipient-name">赵六</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">转账金额</label>
+                <div class="amount-input">
+                    <div class="currency-symbol">¥</div>
+                    <input type="number" class="amount-field" value="0">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">备注（可选）</label>
+                <input type="text" class="form-input" placeholder="添加备注信息">
+            </div>
+            
+            <div class="form-footer">
+                <div class="btn btn-primary">确认转账</div>
+            </div>
+        </div>
+        
+        <!-- 历史记录页面 -->
+        <div class="screen history-screen">
+            <div class="nav-header">
+                <div class="back-btn">←</div>
+                <div class="page-title">历史记录</div>
+            </div>
+            
+            <div class="filter-bar">
+                <div class="filter-chip active">全部</div>
+                <div class="filter-chip">我的转账</div>
+                <div class="filter-chip">我的收款</div>
+                <div class="filter-chip">张三</div>
+                <div class="filter-chip">李四</div>
+                <div class="filter-chip">王五</div>
+                <div class="filter-chip">赵六</div>
+            </div>
+            
+            <div class="history-list">
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-users">
+                            <div class="history-avatar">张</div>
+                            <div class="history-direction">→</div>
+                            <div class="history-avatar">李</div>
+                        </div>
+                        <div class="history-amount">¥85.00</div>
+                    </div>
+                    <div class="history-time">今天 14:30</div>
+                    <div class="history-note">午餐费用</div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-users">
+                            <div class="history-avatar">王</div>
+                            <div class="history-direction">→</div>
+                            <div class="history-avatar">赵</div>
+                        </div>
+                        <div class="history-amount">¥120.50</div>
+                    </div>
+                    <div class="history-time">今天 12:15</div>
+                    <div class="history-note">打车费</div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-users">
+                            <div class="history-avatar">李</div>
+                            <div class="history-direction">→</div>
+                            <div class="history-avatar">张</div>
+                        </div>
+                        <div class="history-amount">¥45.00</div>
+                    </div>
+                    <div class="history-time">昨天 20:45</div>
+                    <div class="history-note">电影票</div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-users">
+                            <div class="history-avatar">赵</div>
+                            <div class="history-direction">→</div>
+                            <div class="history-avatar">王</div>
+                        </div>
+                        <div class="history-amount">¥160.50</div>
+                    </div>
+                    <div class="history-time">昨天 18:30</div>
+                    <div class="history-note">超市购物</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 这里可以添加交互逻辑
+        // 在实际开发中，这部分会由微信小程序的框架和代码实现
+        // 此处仅作为原型展示
+    </script>
+</body>
+</html>
