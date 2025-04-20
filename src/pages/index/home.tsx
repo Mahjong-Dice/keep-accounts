@@ -14,7 +14,7 @@ export const Home: FC<IHomeProps> = () => {
       Taro.showLoading({
         title: '加入房间中...'
       });
-      const openid = Taro.getStorageSync("openid");
+      // const openid = Taro.getStorageSync("openid");
       const res: any = await Taro.showModal({
         title: '加入房间',
         content: '',
@@ -29,12 +29,13 @@ export const Home: FC<IHomeProps> = () => {
         Taro.setStorageSync("userInfo", userInfo);
 
         const loginRes = await Taro.login();
-        const { token } = await createUser(loginRes.code, userInfo);
+        const { token, openid } = await createUser(loginRes.code, userInfo);
         console.log("token", token);
         if (token) {
           Taro.setStorageSync("token", token);
         }
         // 加入房间
+        Taro.setStorageSync("openid", openid);
         await joinRoom(+roomId, openid);
 
         Taro.setStorageSync("token", token);

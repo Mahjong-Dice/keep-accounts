@@ -22,7 +22,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // 配置静态文件服务
-app.use('/uploads', authenticate, express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 微信认证接口
 app.post("/api/wechat/auth", async (req, res) => {
@@ -35,7 +35,10 @@ app.post("/api/wechat/auth", async (req, res) => {
 
     const openid = await getOpenid(code as string);
     const authResult = await createUser(openid, code as string, userInfo);
-    sendResponse(res, 200, true, "认证成功，创建用户", authResult);
+    sendResponse(res, 200, true, "认证成功，创建用户", {
+      ...authResult,
+      openid
+    });
   } catch (error: Error | any) {
     console.error("认证失败:", error);
     sendResponse(res, 500, false, "认证失败", null, error.message);
@@ -66,16 +69,16 @@ app.get("/api/rooms", authenticate, async (req, res) => {
     const { openid } = req.query;
     if (!openid) {
       sendResponse(res, 400, false, "参数错误", null, "openid is required");
-      return;
     }
 
     try {
       const roomsInfo = await getUserRoom(openid as string);
       sendResponse(res, 200, true, "获取房间信息成功", roomsInfo);
+
     } catch (error: Error | any) {
       if (error.message === "User not found") {
-        return sendResponse(res, 404, false, "用户未找到", null, "User not found");
-        // return;
+        sendResponse(res, 404, false, "用户未找到", null, "User not found");
+
       } else {
         throw error;
       }
@@ -93,7 +96,6 @@ app.delete("/api/rooms/:id", authenticate, async (req, res) => {
 
     if (isNaN(roomId)) {
       sendResponse(res, 400, false, "参数错误", null, "无效的房间ID格式");
-      return;
     }
 
     try {
@@ -155,12 +157,12 @@ app.post("/api/transactions", authenticate, async (req, res) => {
     // 验证参数
     if (!senderOpenid || !receiverOpenid || !amount) {
       sendResponse(res, 400, false, "参数错误", null, "发送方ID、接收方ID和金额不能为空");
-      return;
+      // return;
     }
     // 验证金额是否为正数
     else if (amount <= 0) {
       sendResponse(res, 400, false, "参数错误", null, "交易金额必须为正数");
-      return;
+      // return;
     }
     else {
       // 验证双方是否在同一房间

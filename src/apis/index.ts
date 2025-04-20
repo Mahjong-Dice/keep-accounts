@@ -35,6 +35,7 @@ export const login = async () => {
                 userInfo: userInfo
               }
             });
+
             if (data.token) {
               Taro.setStorageSync("token", data.token);
             }

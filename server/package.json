@@ -7,7 +7,8 @@
     "start": "ts-node index.ts",
     "dev": "nodemon --exec ts-node index.ts",
     "build": "tsc",
-    "serve": "tsc && node ./dist/index.js"
+    "serve": "tsc && node ./dist/index.js",
+    "build:docker": "tsc && cp package.json dist/ && cp package-lock.json dist/"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",

@@ -124,6 +124,7 @@ export async function deleteRoom(roomId: number, openid: string) {
 export async function joinRoom(roomId: number, openid: string) {
   return await prisma.$transaction(async (tx) => {
     // 1. 先通过wxOpenId查找用户
+    // console.log("openid", openid);
     const user = await tx.user.findUnique({
       where: { wxOpenId: openid },
       select: { id: true, name: true, avatarUrl: true },
