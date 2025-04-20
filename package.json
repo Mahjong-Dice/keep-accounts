@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "多人记账",
+  "time": "2025-04-20 20:50:00",
   "templateInfo": {
     "name": "taro-hooks@2x",
     "typescript": true,
