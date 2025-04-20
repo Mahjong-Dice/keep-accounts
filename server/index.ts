@@ -30,6 +30,7 @@ app.post("/api/wechat/auth", async (req, res) => {
     const { code, userInfo } = req.body;
     if (!code) {
       sendResponse(res, 400, false, "参数错误", null, "code is required");
+      return;
     }
 
     const openid = await getOpenid(code as string);
@@ -47,6 +48,7 @@ app.post("/api/wechat/auth-with-room", async (req, res) => {
     const { code, userInfo, createRoom } = req.body;
     if (!code) {
       sendResponse(res, 400, false, "参数错误", null, "code is required");
+      return;
     }
 
     const result = await authenticateAndCreateRoom(code as string, userInfo);
@@ -64,6 +66,7 @@ app.get("/api/rooms", authenticate, async (req, res) => {
     const { openid } = req.query;
     if (!openid) {
       sendResponse(res, 400, false, "参数错误", null, "openid is required");
+      return;
     }
 
     try {
@@ -89,6 +92,7 @@ app.delete("/api/rooms/:id", authenticate, async (req, res) => {
 
     if (isNaN(roomId)) {
       sendResponse(res, 400, false, "参数错误", null, "无效的房间ID格式");
+      return;
     }
 
     try {
@@ -135,6 +139,7 @@ app.post("/api/join-room", async (req, res) => {
     const { roomId, openid } = req.body;
     const result = await joinRoom(roomId, openid);
     sendResponse(res, 200, true, "加入房间成功", result);
+
   } catch (error: Error | any) {
     console.error("加入房间失败:", error);
     sendResponse(res, 500, false, "加入房间失败", null, error.message);
@@ -149,10 +154,12 @@ app.post("/api/transactions", authenticate, async (req, res) => {
     // 验证参数
     if (!senderOpenid || !receiverOpenid || !amount) {
       sendResponse(res, 400, false, "参数错误", null, "发送方ID、接收方ID和金额不能为空");
+      return;
     }
     // 验证金额是否为正数
     else if (amount <= 0) {
       sendResponse(res, 400, false, "参数错误", null, "交易金额必须为正数");
+      return;
     }
     else {
       // 验证双方是否在同一房间
@@ -198,10 +205,12 @@ app.post("/api/rooms/:roomId/kick-member", authenticate, async (req, res) => {
     // 参数验证
     if (!kickedOpenid || !ownerOpenid) {
       sendResponse(res, 400, false, "参数错误", null, "被踢用户ID和房主ID不能为空");
+      return;
     }
 
     if (isNaN(Number(roomId))) {
       sendResponse(res, 400, false, "参数错误", null, "无效的房间ID格式");
+      return;
     }
 
     // 调用踢人服务
@@ -213,18 +222,22 @@ app.post("/api/rooms/:roomId/kick-member", authenticate, async (req, res) => {
     // 根据错误类型返回不同的状态码
     if (error.message === "房间不存在") {
       sendResponse(res, 404, false, "踢人失败", null, "房间不存在");
+      return;
     } else if (
       error.message === "只有房主可以踢人" ||
       error.message === "房主不能踢自己"
     ) {
       sendResponse(res, 403, false, "踢人失败", null, error.message);
+      return;
     } else if (
       error.message === "被踢用户不存在" ||
       error.message === "被踢用户不在房间中"
     ) {
       sendResponse(res, 400, false, "踢人失败", null, error.message);
+      return;
     } else {
       sendResponse(res, 500, false, "踢人失败", null, error.message);
+      return;
     }
   }
 });
