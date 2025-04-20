@@ -33,7 +33,7 @@ services:
     volumes:
       - /app/node_modules
     command: >
-      sh -c "npx prisma migrate deploy && node index.js"
+      sh -c "npx prisma migrate deploy && node dist/index.js"
 
 
 volumes:
