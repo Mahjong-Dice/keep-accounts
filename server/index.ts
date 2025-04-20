@@ -75,6 +75,7 @@ app.get("/api/rooms", authenticate, async (req, res) => {
     } catch (error: Error | any) {
       if (error.message === "User not found") {
         sendResponse(res, 404, false, "用户未找到", null, "User not found");
+        return;
       } else {
         throw error;
       }
