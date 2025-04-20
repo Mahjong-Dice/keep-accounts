@@ -1,7 +1,4 @@
 
-## 别名配置
-1. 在config/index.ts中配置vite的alias即可
-
 # 多人记账小程序
 
 这是一个基于微信小程序的多人记账应用，旨在帮助朋友、家人或团队成员轻松管理共同账目。
@@ -106,6 +103,9 @@ docker-compose up -d
 1. `Taro.navigateTo`：用于页面跳转，可传参，不可跳转tabbar页面
 2. `Taro.switchTab`：用于tabbar页面间跳转，不可传参
 3. `Taro.reLaunch`：重新加载页面，可跳转任意页面
+
+## 别名配置
+1. 在config/index.ts中配置vite的alias即可
 
 ## 部署说明
 
