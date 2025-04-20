@@ -33,7 +33,7 @@ services:
     volumes:
       - /app/node_modules
     command: >
-      sh -c "npx prisma migrate deploy && npx prisma studio & npm run serve"
+      sh -c "npx prisma migrate deploy && npx prisma studio & npm start"
 
 
 volumes:
