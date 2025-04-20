@@ -2,6 +2,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+RUN npm run build:docker
+
 COPY dist/ .
 COPY prisma/ .
 
