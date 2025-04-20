@@ -59,7 +59,7 @@ export const Home: FC<IHomeProps> = () => {
     } finally {
       setTimeout(() => {
         Taro.hideLoading();
-      }, 500);
+      }, 1000);
     }
   };
 
