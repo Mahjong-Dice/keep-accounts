@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import Taro from '@tarojs/taro';
+
 interface QueryOptions<T> {
   queryFn: () => Promise<T>;
   initialData?: T;
